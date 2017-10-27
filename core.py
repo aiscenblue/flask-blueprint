@@ -16,7 +16,7 @@ import inspect
 """
 
 
-class CoreBlueprint:
+class Core:
     __app = None
 
     def __init__(self, app, root_path):
