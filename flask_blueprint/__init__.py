@@ -14,7 +14,7 @@ from .package_extractor import PackageExtractor
 """
 
 __all__ = ['Core']
-__version__ = '1.1.9'
+__version__ = '1.2.0'
 
 
 class Core:

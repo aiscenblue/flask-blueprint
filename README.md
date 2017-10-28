@@ -1,3 +1,7 @@
+# PIP installation
+
+`pip install flask-blueprint`
+
 # Easy Installation
 
 ```
