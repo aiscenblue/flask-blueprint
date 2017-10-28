@@ -2,6 +2,5 @@
 setup.cfg
 setup.py
 flask-blueprint\__init__.py
-flask-blueprint\core.py
 flask-blueprint\module_router.py
 flask-blueprint\package_extractor.py
