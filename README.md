@@ -1,3 +1,8 @@
+# Requirements:
+```
+  Python 2.7 or higher
+```
+
 # PIP installation
 
 `pip install flask-blueprint`
