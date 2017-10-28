@@ -8,6 +8,10 @@
     CoreBlueprint(app='flask/application/app', root_path='path/to/module')
 ```
 
+> view on pypi
+
+> https://pypi.python.org/pypi/flask-blueprint
+
 # Module routing
 
 
