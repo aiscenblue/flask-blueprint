@@ -1,8 +1,9 @@
 from distutils.core import setup
+from flask_blueprint import __version__
 
 setup(
     name='flask-blueprint',
-    version='1.1.6',
+    version=__version__,
     description='Flask blueprint generator',
     author='Jeffrey Marvin Forones',
     author_email='aiscenblue@gmail.com',
