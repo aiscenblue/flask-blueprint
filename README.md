@@ -84,3 +84,6 @@ __routes__ = [
 ```
 
 > you can set a function with single or multiple methods
+
+> blueprint documentation
+> http://flask.pocoo.org/docs/0.12/blueprints/#my-first-blueprint
