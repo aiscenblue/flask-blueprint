@@ -1,7 +1,7 @@
 import inspect
 import pkgutil
 
-from module_router import ModuleRouter
+from .module_router import ModuleRouter
 
 
 class PackageExtractor:

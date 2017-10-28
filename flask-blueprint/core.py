@@ -1,4 +1,4 @@
-from package_extractor import PackageExtractor
+from .package_extractor import PackageExtractor
 
 """
     Description:: Initialize the blueprints inside in the root folder
