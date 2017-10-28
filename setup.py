@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='flask-blueprint',
-    version='1.1.2',
+    version='1.1.3',
     description='Flask blueprint generator',
     author='Jeffrey Marvin Forones',
     author_email='aiscenblue@gmail.com',
