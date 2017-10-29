@@ -14,17 +14,17 @@ from .package_extractor import PackageExtractor
 """
 
 __all__ = ['Core']
-__version__ = '1.2.1'
+__version__ = '1.2.2'
 
 
 class Core:
     __app = None
 
-    def __init__(self, app, root_path):
+    def __init__(self, app, root_paths):
 
         """ save sanic app module """
         self.__app = app
-        self.root_path = root_path
+        self.root_path = root_paths
 
         """ register blueprint to the current path """
-        PackageExtractor(application=app, path=root_path)
+        PackageExtractor(application=app, paths=root_paths)

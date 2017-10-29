@@ -102,9 +102,6 @@ class ModuleRouter:
     @staticmethod
     def blueprint_name(name):
 
-        root_module = name.replace(".", "")
-
-        name = str(name).replace(root_module, "")
         """ set index automatically as home page """
         if "index" in name:
             name = str(name).replace("index", "")
@@ -119,7 +116,7 @@ class ModuleRouter:
         """
         if name[-1:] == ".":
             name = name[:-1]
-        http_name = str(name).replace(".", "/")
+        http_name = "/" + str(name).replace(".", "/")
 
         return http_name
 
