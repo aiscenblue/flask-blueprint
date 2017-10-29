@@ -17,12 +17,24 @@ __all__ = ['Core']
 __version__ = '1.2.2'
 
 
+"""
+    Core
+        :param app
+            your flask application module
+                example: app = Flask('my_flask_app')
+        
+        :param root_paths
+            paths for your module directories        
+
+"""
+
+
 class Core:
     __app = None
 
     def __init__(self, app, root_paths):
 
-        """ save sanic app module """
+        """ save flask app module """
         self.__app = app
         self.root_path = root_paths
 
