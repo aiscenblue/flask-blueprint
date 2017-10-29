@@ -7,12 +7,14 @@ from .module_router import ModuleRouter
 class PackageExtractor:
 
     __packages = None
+    __modules = []
+    __routers = []
 
     def __init__(self, application, path):
         self.path = path
         self.application = application
         _packages = self.__inspect_packages(packages=pkgutil.walk_packages(path, prefix="", onerror=None))
-        self.extract_packages(packages=_packages)
+        self.__extract_packages(packages=_packages)
 
     @staticmethod
     def __inspect_packages(packages):
@@ -25,22 +27,33 @@ class PackageExtractor:
             else:
                 raise ValueError("Package does not have an item.")
 
-    def extract_packages(self, packages):
+    def __extract_packages(self, packages):
         if len(packages):
-            loader, name, is_pkg = packages.pop(0)
-            """ if module found load module and save all attributes in the module found """
-            mod = loader.find_module(name).load_module(name)
+            self.__extract_modules(package=packages.pop(0)).__extract_packages(packages)
 
-            """ find the attribute method on each module """
-            if hasattr(mod, '__method__'):
-                module_router = ModuleRouter(mod)
+    """ extract modules from the package"""
+    def __extract_modules(self, package):
+        loader, name, is_pkg = package
+        """ if module found load module and save all attributes in the module found """
+        mod = loader.find_module(name).load_module(name)
 
-                """ register to the blueprint if method attribute found """
-                module_router.register_route(app=self.application, name=name)
+        """ find the attribute method on each module """
+        if hasattr(mod, '__method__'):
+            """ register to the blueprint if method attribute found """
+            module_router = ModuleRouter(mod).register_route(app=self.application, name=name)
+            self.__routers.extend(module_router.routers)
+            self.__modules.append(mod)
 
-            else:
-                """ prompt not found notification """
-                # print('{} has no module attribute method'.format(mod))
-                pass
-            self.extract_packages(packages)
+        else:
+            """ prompt not found notification """
+            # print('{} has no module attribute method'.format(mod))
+            pass
+        return self
 
+    @property
+    def modules(self):
+        return self.__modules
+
+    @property
+    def routers(self):
+        return self.__routers

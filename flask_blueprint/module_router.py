@@ -2,6 +2,9 @@ import inspect
 
 
 class ModuleRouter:
+
+    __routers = []
+
     def __init__(self, mod):  # module
         self._module = mod
         if self._is_valid_module():
@@ -19,7 +22,7 @@ class ModuleRouter:
 
             elif route_type == 'fn':
                 route_name, slug, fn, methods = route_data
-
+                self.__routers.append(route_data)
                 self._module.__method__.add_url_rule(
                     rule=slug,
                     endpoint=fn.__name__,
@@ -77,11 +80,15 @@ class ModuleRouter:
                 (fn_name, fn_object) = members.pop(0)
                 route_name, slug, cls = route
                 if inspect.isfunction(fn_object):
+
+                    _methods = self.get_http_methods([fn_name])
+
                     self._module.__method__.add_url_rule(
                         rule=slug,
                         endpoint=fn_name,
                         view_func=fn_object,
-                        methods=self.get_http_methods([fn_name]))
+                        methods=_methods)
+                    self.__routers.append((slug, fn_name, fn_object, _methods))
                 else:
                     raise KeyError("Member is not a function.")
                 self.class_member_route(route, members)
@@ -90,6 +97,7 @@ class ModuleRouter:
 
     def register_route(self, app, name):
         app.register_blueprint(self._module.__method__, url_prefix=self.blueprint_name(name))
+        return self
 
     @staticmethod
     def blueprint_name(name):
@@ -114,3 +122,7 @@ class ModuleRouter:
         http_name = str(name).replace(".", "/")
 
         return http_name
+
+    @property
+    def routers(self):
+        return self.__routers
