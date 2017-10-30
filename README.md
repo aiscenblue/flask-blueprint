@@ -10,7 +10,9 @@
 # Easy Installation
 
 ```
-    CoreBlueprint(app='flask/application/app', root_path='path/to/module')
+    from flask_blueprint import Core
+    
+    Core(app='flask/application/app', root_path='path/to/module')
 ```
 
 > view on pypi
