@@ -25,10 +25,11 @@
 ` create a folder Home where you point your module directory`
 
 ```
-~/root-directory/
-    |-- __init__.py
-    |-- methods.py
-    |-- routes.py
+~/module-directory/
+    |-- /module_name
+      |-- __init__.py
+      |-- methods.py
+      |-- routes.py
 ```
 
 `NOTE:: __init__.py must be ALWAYS included in the folder in order to detect the model folder as a module`
