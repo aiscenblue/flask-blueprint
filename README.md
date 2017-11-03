@@ -22,7 +22,7 @@
 # Module routing
 
 
-> create a folder Home where you point your module directory
+` create a folder Home where you point your module directory`
 
 ```
 ~/root-directory/
@@ -33,7 +33,7 @@
 
 `NOTE:: __init__.py must be ALWAYS included in the folder in order to detect the model folder as a module`
 
-> methods.py
+#### methods.py
 
 ```
 from flask import make_response
@@ -59,7 +59,7 @@ class Methods:
 
 ```
 
-> routing.py
+#### routing.py
 
 ```
 from flask import Blueprint
@@ -79,7 +79,39 @@ __routes__ = [
 
 ```
 
-> custom routing using function
+# Variable Rules
+`http://flask.pocoo.org/docs/0.12/quickstart/#variable-rules`
+```
+__routes__ = [
+    ("posts", "/<int:post_id>", Methods)
+]
+```
+
+```
+from flask import make_response
+
+
+class Methods:
+
+    @staticmethod
+    def index(post_id=None):
+        return make_response("get post ID: {}".format(post_id), 200)
+
+    @staticmethod
+    def create(name=None):
+        return make_response("POST method for post ID: {}".format(post_id), 200)
+
+    @staticmethod
+    def update(name=None):
+        return make_response("PUT method for post ID: {}".format(post_id), 200)
+
+    @staticmethod
+    def destroy(name=None):
+        return make_response("DELETE method for post ID: {}".format(post_id), 200)
+
+```
+
+# Custom Routing using function
 
 ```
 from flask import Blueprint
@@ -98,7 +130,7 @@ __routes__ = [
 ]
 ```
 
-> you can set a function with single or multiple methods
+#### you can set a function with single or multiple methods
 
-> blueprint documentation
-> http://flask.pocoo.org/docs/0.12/blueprints/#my-first-blueprint
+#### blueprint documentation
+#### http://flask.pocoo.org/docs/0.12/blueprints/#my-first-blueprint
