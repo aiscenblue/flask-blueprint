@@ -3,8 +3,7 @@ Better way to create blueprint
 
 [![forthebadge](http://forthebadge.com/images/badges/built-with-love.svg)](https://github.com/aiscenblue/flask-blueprint)
 [![PyPI version](https://badge.fury.io/py/flask-app-core.svg)](https://github.com/aiscenblue/flask-blueprint)
-[![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://github.com/aiscenblue/flask-blueprint/blob/master/LICENSE)
-[![dependencies Status](https://david-dm.org/boennemann/badges/status.svg)](https://github.com/aiscenblue/flask-blueprint)
+[![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://github.com/aiscenblue/flask-blueprint/blob/master/LICENSE))
 
 # Requirements:
 ```
