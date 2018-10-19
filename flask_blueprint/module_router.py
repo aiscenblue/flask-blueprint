@@ -4,9 +4,12 @@ import inspect
 class ModuleRouter:
 
     __routers = []
+    __ignore_names = ["index", "routes"]
 
-    def __init__(self, mod):  # module
+    def __init__(self, mod, **kwargs):  # module
         self._module = mod
+        if "ignore_names" in kwargs:
+            self.__ignore_names.extend(kwargs['ignore_names'])
         if self._is_valid_module():
             self.model_add_router()
 
@@ -99,26 +102,26 @@ class ModuleRouter:
         app.register_blueprint(self._module.__method__, url_prefix=self.blueprint_name(name))
         return self
 
-    @staticmethod
-    def blueprint_name(name):
+    def ignore_default_names(self, name):
+        for ignore_name in list(set(self.__ignore_names)):
+            if ignore_name in name:
+                name = str(name).replace(ignore_name, "")
+        return name
 
+    def blueprint_name(self, name):
         """ set index automatically as home page """
-        if "index" in name:
-            name = str(name).replace("index", "")
-        if "routes" in name:
-            name = str(name).replace("routes", "")
-        if "module" in name:
-            name = str(name).replace("module", "")
+        return self.blueprint_name_to_url(self.ignore_default_names(name))
 
-        """ remove the last . in the string it it ends with a . 
+    @staticmethod
+    def blueprint_name_to_url(name):
+        """ remove the last . in the string it it ends with a .
             for the url structure must follow the flask routing format
             it should be /model/method instead of /model/method/
         """
         if name[-1:] == ".":
             name = name[:-1]
-        http_name = "/" + str(name).replace(".", "/")
-
-        return http_name
+        name = str(name).replace(".", "/")
+        return name
 
     @property
     def routers(self):
