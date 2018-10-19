@@ -1,5 +1,6 @@
 import inspect
 import pkgutil
+from os import listdir
 
 from .module_router import ModuleRouter
 
@@ -29,16 +30,26 @@ class PackageExtractor:
     def __init__(self, application, paths):
         self.path = paths
         self.application = application
-        self.__extract_packages(packages=pkgutil.walk_packages(paths, prefix="", onerror=None))
+        self.__iter_paths()
+
+    def __iter_paths(self):
+        for path in self.path:
+            self.__iter_path_sub_path(sub_paths=listdir(path))
+
+    def __iter_path_sub_path(self, sub_paths):
+        for path_directories in sub_paths:
+            self.__extract_packages(packages=pkgutil.walk_packages(path_directories, prefix='', onerror=None))
 
     def __extract_packages(self, packages):
         if inspect.isgenerator(packages):
             try:
                 loader, name, is_pkg = next(packages)
-                self.__extract_modules(loader, name, is_pkg)
                 self.__extract_packages(packages)
+                self.__extract_modules(loader, name, is_pkg)
             except StopIteration:
                 pass
+        else:
+            raise TypeError("package should be a generator type")
 
     """ extract modules from the package"""
 
@@ -52,6 +63,7 @@ class PackageExtractor:
 
             """ register to the blueprint if method attribute found """
             module_router = ModuleRouter(mod).register_route(app=self.application, name=name)
+
             self.__routers.extend(module_router.routers)
             self.__modules.append(mod)
 
