@@ -28,12 +28,12 @@ class PackageExtractor:
     __routers = []
 
     def __init__(self, application, paths):
-        self.path = paths
+        self.paths = paths
         self.application = application
         self.__iter_paths()
 
     def __iter_paths(self):
-        for path in self.path:
+        for path in self.paths:
             self.__iter_path_sub_path(sub_paths=listdir(path))
 
     def __iter_path_sub_path(self, sub_paths):
