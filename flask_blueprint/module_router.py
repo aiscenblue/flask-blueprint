@@ -1,4 +1,37 @@
 import inspect
+from enum import Enum
+
+
+class ErrorMessage(Enum):
+    METHOD_NOT_A_LIST = 'Methods must be a type of list.'
+    INVALID_ROUTE = 'Invalid route syntax'
+    NAME_NOT_A_LIST = 'names must be a type of list'
+    MEMBER_NOT_A_FUNCTION = 'Member is not a function.'
+
+
+class RoutingType(Enum):
+    CLS = 'cls'
+    FN = 'fn'
+
+
+class MethodType(Enum):
+    GET = 'GET'
+    POST = 'POST'
+    PUT = 'PUT'
+    DELETE = 'DELETE'
+    PATCH = 'PATCH'
+
+
+class ModuleType(Enum):
+    ROUTES = '__routes__'
+    METHOD = '__method__'
+
+
+class PreDefinedHttpMethod(Enum):
+    INDEX = 'index'
+    CREATE = 'create'
+    UPDATE = 'update'
+    DESTROY = 'destroy'
 
 
 class ModuleRouter:
@@ -16,14 +49,14 @@ class ModuleRouter:
     def model_add_router(self):
         if hasattr(self._module, '__routes__') and len(self._module.__routes__):
             route_type, route_data = self._routing_type(route=self._module.__routes__.pop(0))
-            if route_type == 'cls':
+            if route_type == RoutingType.CLS:
                 """ If it's a class it needs to extract the methods by function names
                     magic functions are excluded
                 """
                 route_name, slug, cls = route_data
                 self.class_member_route(route=route_data, members=self.get_cls_fn_members(cls))
 
-            elif route_type == 'fn':
+            elif route_type == RoutingType.FN:
                 route_name, slug, fn, methods = route_data
                 self.__routers.append(route_data)
                 self._module.__method__.add_url_rule(
@@ -34,21 +67,21 @@ class ModuleRouter:
             self.model_add_router()
 
     def _is_valid_module(self):
-        return hasattr(self._module, '__routes__') or hasattr(self._module, '__method__')
+        return hasattr(self._module, str(ModuleType.ROUTES)) or hasattr(self._module, str(ModuleType.METHOD))
 
     @staticmethod
     def _routing_type(route):
         __type = None
         if isinstance(route, tuple):
             if len(route) == 3 and inspect.isclass(route[2]):
-                __type = 'cls'
+                __type = RoutingType.CLS
             elif len(route) == 4 and inspect.isfunction(route[2]):
                 if isinstance(route[3], (list, tuple, set)):
-                    __type = 'fn'
+                    __type = RoutingType.FN
                 else:
-                    raise TypeError("methods must be a list.")
+                    raise TypeError(ErrorMessage.METHOD_NOT_A_LIST)
             else:
-                raise TypeError("Invalid route syntax.")
+                raise TypeError(ErrorMessage.INVALID_ROUTE)
         return __type, route
 
     @staticmethod
@@ -58,20 +91,20 @@ class ModuleRouter:
 
             for name in names:
                 if "__" not in name:
-                    if name == "index":
-                        methods.append('GET')
-                    elif name == "create":
-                        methods.append('POST')
-                    elif name == "update":
-                        methods.append('PUT')
-                    elif name == "destroy":
-                        methods.append('DELETE')
+                    if name == PreDefinedHttpMethod.INDEX:
+                        methods.append(MethodType.GET)
+                    elif name == PreDefinedHttpMethod.CREATE:
+                        methods.append(MethodType.POST)
+                    elif name == PreDefinedHttpMethod.UPDATE:
+                        methods.append(MethodType.PUT)
+                    elif name == PreDefinedHttpMethod.DESTROY:
+                        methods.append(MethodType.DELETE)
                     else:
-                        methods.append('GET')
+                        methods.append(MethodType.GET)
 
             return methods
         else:
-            raise TypeError("names must be a list")
+            raise TypeError(ErrorMessage.NAME_NOT_A_LIST)
 
     @staticmethod
     def get_cls_fn_members(cls):
@@ -93,10 +126,10 @@ class ModuleRouter:
                         methods=_methods)
                     self.__routers.append((slug, fn_name, fn_object, _methods))
                 else:
-                    raise KeyError("Member is not a function.")
+                    raise KeyError(ErrorMessage.MEMBER_NOT_A_FUNCTION)
                 self.class_member_route(route, members)
         else:
-            raise TypeError("members must be a list.")
+            raise TypeError(ErrorMessage.MEMBER_NOT_A_FUNCTION)
 
     def register_route(self, app, name):
         app.register_blueprint(self._module.__method__, url_prefix=self.blueprint_name(name))

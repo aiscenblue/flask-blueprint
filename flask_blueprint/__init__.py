@@ -13,8 +13,8 @@ from .package_extractor import PackageExtractor
 
 """
 
-__all__ = ['Core']
-__version__ = '1.2.6'
+__all__ = ['Core', '__version__']
+__version__ = '1.2.7'
 
 
 """

@@ -55,6 +55,7 @@ class PackageExtractor:
         return list(set([path.split("/")[-1:][0] for path in self.paths]))
 
     """ extract modules from the package"""
+
     def __extract_modules(self, loader, name, is_pkg):
 
         """ if module found load module and save all attributes in the module found """
@@ -64,7 +65,9 @@ class PackageExtractor:
         if hasattr(mod, '__method__'):
 
             """ register to the blueprint if method attribute found """
-            module_router = ModuleRouter(mod, ignore_names=self.__serialize_module_paths()).register_route(app=self.application, name=name)
+            module_router = ModuleRouter(mod,
+                                         ignore_names=self.__serialize_module_paths()
+                                         ).register_route(app=self.application, name=name)
 
             self.__routers.extend(module_router.routers)
             self.__modules.append(mod)
