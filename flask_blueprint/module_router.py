@@ -9,24 +9,6 @@ class ErrorMessage(Enum):
     MEMBER_NOT_A_FUNCTION = 'Member is not a function.'
 
 
-class RoutingType(Enum):
-    CLS = 'cls'
-    FN = 'fn'
-
-
-class MethodType(Enum):
-    GET = 'GET'
-    POST = 'POST'
-    PUT = 'PUT'
-    DELETE = 'DELETE'
-    PATCH = 'PATCH'
-
-
-class ModuleType(Enum):
-    ROUTES = '__routes__'
-    METHOD = '__method__'
-
-
 class PreDefinedHttpMethod(Enum):
     INDEX = 'index'
     CREATE = 'create'
@@ -47,16 +29,16 @@ class ModuleRouter:
             self.model_add_router()
 
     def model_add_router(self):
-        if hasattr(self._module, '__routes__') and len(self._module.__routes__):
+        if hasattr(self._module, "__routes__") and len(self._module.__routes__):
             route_type, route_data = self._routing_type(route=self._module.__routes__.pop(0))
-            if route_type == RoutingType.CLS:
+            if route_type == 'cls':
                 """ If it's a class it needs to extract the methods by function names
                     magic functions are excluded
                 """
                 route_name, slug, cls = route_data
                 self.class_member_route(route=route_data, members=self.get_cls_fn_members(cls))
 
-            elif route_type == RoutingType.FN:
+            elif route_type == 'fn':
                 route_name, slug, fn, methods = route_data
                 self.__routers.append(route_data)
                 self._module.__method__.add_url_rule(
@@ -67,17 +49,17 @@ class ModuleRouter:
             self.model_add_router()
 
     def _is_valid_module(self):
-        return hasattr(self._module, str(ModuleType.ROUTES)) or hasattr(self._module, str(ModuleType.METHOD))
+        return hasattr(self._module, "__routes__") or hasattr(self._module, "__method__")
 
     @staticmethod
     def _routing_type(route):
         __type = None
         if isinstance(route, tuple):
             if len(route) == 3 and inspect.isclass(route[2]):
-                __type = RoutingType.CLS
+                __type = 'cls'
             elif len(route) == 4 and inspect.isfunction(route[2]):
                 if isinstance(route[3], (list, tuple, set)):
-                    __type = RoutingType.FN
+                    __type = 'fn'
                 else:
                     raise TypeError(ErrorMessage.METHOD_NOT_A_LIST)
             else:
@@ -92,15 +74,15 @@ class ModuleRouter:
             for name in names:
                 if "__" not in name:
                     if name == PreDefinedHttpMethod.INDEX:
-                        methods.append(MethodType.GET)
+                        methods.append('GET')
                     elif name == PreDefinedHttpMethod.CREATE:
-                        methods.append(MethodType.POST)
+                        methods.append('POST')
                     elif name == PreDefinedHttpMethod.UPDATE:
-                        methods.append(MethodType.PUT)
+                        methods.append('PUT')
                     elif name == PreDefinedHttpMethod.DESTROY:
-                        methods.append(MethodType.DELETE)
+                        methods.append('DELETE')
                     else:
-                        methods.append(MethodType.GET)
+                        methods.append('GET')
 
             return methods
         else:
@@ -153,6 +135,8 @@ class ModuleRouter:
         """
         if name[-1:] == ".":
             name = name[:-1]
+        if name[-1:] is not "/":
+            name = "/" + name
         name = str(name).replace(".", "/")
         return name
 

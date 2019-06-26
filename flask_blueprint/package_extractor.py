@@ -1,16 +1,13 @@
 import inspect
 import pkgutil
-from os import listdir
 
 from .module_router import ModuleRouter
 
 """
     PACKAGE EXTRACTOR
-
         It's purpose is to extract all the modules based on the paths of the parameter given
         it extracts valid packages within the root module path
         and register the valid modules to the flask blueprint
-
     :param application
         flask application object
             example: flask_app = Flask(import_name, instance_relative_config=True)
@@ -33,19 +30,14 @@ class PackageExtractor:
         self.__iter_paths()
 
     def __iter_paths(self):
-        for path in self.paths:
-            self.__iter_path_sub_path(sub_paths=listdir(path))
-
-    def __iter_path_sub_path(self, sub_paths):
-        for path_directories in sub_paths:
-            self.__extract_packages(packages=pkgutil.walk_packages(path_directories, prefix='', onerror=None))
+        self.__extract_packages(packages=pkgutil.walk_packages(self.paths, prefix='', onerror=None))
 
     def __extract_packages(self, packages):
         if inspect.isgenerator(packages):
             try:
                 loader, name, is_pkg = next(packages)
-                self.__extract_packages(packages)
                 self.__extract_modules(loader, name, is_pkg)
+                self.__extract_packages(packages)
             except StopIteration:
                 pass
         else:
