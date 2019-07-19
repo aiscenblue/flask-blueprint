@@ -13,7 +13,7 @@ from .package_extractor import PackageExtractor
 
 """
 
-__all__ = ['Core', '__version__']
+__all__ = ['Blueprint', '__version__']
 __version__ = '1.2.8'
 
 
@@ -29,7 +29,7 @@ __version__ = '1.2.8'
 """
 
 
-class Core:
+class Blueprint:
     __app = None
 
     def __init__(self, app, root_paths):
