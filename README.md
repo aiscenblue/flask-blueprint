@@ -17,9 +17,12 @@ Better way to create blueprint
 # Easy Installation
 
 ```
-    from flask_blueprint import Core
+    from flask_blueprint import Blueprint
+    from flask import Flask
     
-    Core(app='flask/application/app', root_path='path/to/module')
+    flask_app = Flask(import_name, instance_relative_config=True)
+    Blueprint(app=flask_app, root_path=['path/to/module'])
+    flask.run()
 ```
 
 > view on pypi
