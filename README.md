@@ -22,7 +22,7 @@ Better way to create blueprint
     
     flask_app = Flask(import_name, instance_relative_config=True)
     Blueprint(app=flask_app, root_path=['path/to/module'])
-    flask.run()
+    flask_app.run()
 ```
 
 > view on pypi
