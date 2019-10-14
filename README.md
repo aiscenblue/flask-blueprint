@@ -29,18 +29,37 @@ Better way to create blueprint
 
 > https://pypi.python.org/pypi/flask-blueprint
 
-# Module routing
+# Simple Routing
+```
+create a /modules directory
+create index.py under modules directory
+paste the code below to create initial route
+```
+
+    from flask import Blueprint, make_response, render_template
+
+    """ blueprint module for url handler """
+    __method__ = Blueprint(__name__, __name__)
+    app = __method__
+    
+    
+    @app.route("/", methods=['GET'])
+    def index():
+        return make_response("Welcome to flask starter kit API!", 200)
+
+# Class routing
 
 
 ` create a folder Home where you point your module directory`
 
 ```
 ~/module-directory/
-    |-- /module_name
-      |-- __init__.py
-      |-- methods.py
-      |-- routes.py
+  /__init__.py
+  /index.py 
 ```
+`Your index.py will be your initial route.`
+
+`FOR MORE EXAMPLE SEE: `[Flask Starter kit](https://github.com/aiscenblue/flask-starter-kit)
 
 `NOTE:: __init__.py must be ALWAYS included in the folder in order to detect the model folder as a module`
 
